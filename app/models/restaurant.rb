@@ -1,4 +1,4 @@
-class Restaurants < ApplicationRecord
+class Restaurant < ApplicationRecord
     has_many :foods
     has_many :line_foods, through: :foods
     belongs_to :order, optional: true
