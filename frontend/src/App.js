@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -17,13 +17,11 @@ function App() {
         <Route exact path='/orders'><Orders /></Route>
         <Route exact path='/foods'><Foods /></Route>
         <Route
-  exact
-  path="/restaurants/:restaurantsId/foods"
-  render={({ match }) =>
-    <Foods
-      match={match}
-    />
-}
+          exact
+          path="/restaurants/:restaurantsId/foods"
+          render={({ match }) =>
+            <Foods match={match} />
+          }
 />
       </Switch>
     </Router>
