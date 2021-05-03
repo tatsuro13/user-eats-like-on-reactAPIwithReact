@@ -1,8 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import styled from 'styled-components';
 
 // apis
 import {fetchRestaurants} from '../apis/restaurants';
+
+// reducers
+import {
+  initialState,
+  restaurantsActionTypes,
+  restaurantsReducer,
+} from '../reducers/restaurants.js';
 
 // images
 import MainLogo from '../images/logo.png';
@@ -27,10 +34,19 @@ const MainCover = styled.img`
 `
 
 export const Restaurants = () => {
+
+  const [state, dispatch] = useReducer(restaurantsReducer, initialState);
+
   useEffect(() => {
+    dispatch({type: restaurantsActionTypes.FETCHING});
     fetchRestaurants()
     .then((data) =>
-    console.log(data)
+    dispatch({
+      type:restaurantsActionTypes.FETCH_SUCCESS,
+      payload:{
+        restaurants: data.restaurants
+      }
+    })
     )
   }, [])
     return(
@@ -41,6 +57,13 @@ export const Restaurants = () => {
         <MainCoverImageWpper>
           <MainCover src={MainCoverImage} alt="main cover" />
         </MainCoverImageWpper>
+        {
+          state.restaurantsList.map(restaurant => 
+            <div key={restaurant.id}>
+              {restaurant.name}
+            </div>
+          )
+        }
         </>
     )
 }
