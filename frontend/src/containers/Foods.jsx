@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-export const Foods = ({match}) => {
-    return(
-        <>
-          フード一覧
-          <p>レストランIDは{match.params.restaurantsId}です</p>
-        </>
-    )
-}
+// apis
+import { fetchFoods } from '../apis/foods';
+
+export const Foods = ({ match }) => {
+  useEffect(() => {
+    fetchFoods(match.params.restaurantsId).then((data) => console.log(data));
+  }, []);
+  return <>フード一覧</>;
+};
