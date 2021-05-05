@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ import { LocalMallIcon } from '../components/Icons';
 
 import { FoodWrapper } from '../components/FoodWrapper';
 import Skeleton from '@material-ui/lab/Skeleton';
+
+import { FoodOrderDialog } from '../components/FoodOrderDialog';
 
 import MainLogo from '../images/logo.png';
 import FoodImage from '../images/food-image.jpg';
@@ -58,6 +60,14 @@ const ItemWrapper = styled.div`
 
 export const Foods = ({ match }) => {
   const [foodState, dispatch] = useReducer(foodsReducer, foodinitialState);
+
+  const initialState = {
+    isOpenOrderDialog: false,
+    selectedFood: null,
+    selectedFoodCount: 1,
+  };
+  const [state, setState] = useState(initialState);
+
   useEffect(() => {
     dispatch({ type: foodActionTypes.FETCHING });
     fetchFoods(match.params.restaurantsId).then((data) => {
@@ -96,13 +106,31 @@ export const Foods = ({ match }) => {
             <ItemWrapper key={food.id}>
               <FoodWrapper
                 food={food}
-                onClickFoodWrapper={(food) => console.log(food)}
+                onClickFoodWrapper={(food) =>
+                  setState({
+                    ...state,
+                    isOpenOrderDialog: true,
+                    selectedFood: food,
+                  })
+                }
                 imageUrl={FoodImage}
               />
             </ItemWrapper>
           ))
         )}
       </FoodsList>
+      {state.isOpenOrderDialog && (
+        <FoodOrderDialog
+          food={state.selectedFood}
+          isOpen={state.isOpenOrderDialog}
+          onClose={() =>
+            setState({
+              ...state,
+              isOpenOrderDialog: false,
+            })
+          }
+        />
+      )}
     </>
   );
 };
